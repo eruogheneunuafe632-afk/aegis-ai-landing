@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Aegis AI — Intelligent Coverage for Modern Business</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0b0c10;
+    --cream: #f2ede6;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --muted: #6b6659;
+    --card-bg: #141519;
+    --border: rgba(201,168,76,0.18);
+    --white: #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.35;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 60px;
+    background: rgba(11,12,16,0.7);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--gold-light);
+  }
+  .logo span { font-style: italic; color: var(--cream); }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 40px;
+  }
+
+  nav a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--gold-light); }
+
+  .nav-cta {
+    background: var(--gold);
+    color: var(--ink) !important;
+    padding: 10px 22px;
+    border-radius: 2px;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--gold-light) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 120px 60px 80px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 20%, rgba(201,168,76,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 30%, transparent 80%);
+  }
+
+  /* Floating orbs */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.12;
+    animation: drift 12s ease-in-out infinite alternate;
+  }
+  .orb-1 { width: 500px; height: 500px; background: var(--gold); top: -100px; left: -100px; animation-delay: 0s; }
+  .orb-2 { width: 350px; height: 350px; background: #4c6ec9; bottom: 0; right: -80px; animation-delay: -4s; }
+  .orb-3 { width: 250px; height: 250px; background: var(--gold-light); top: 40%; left: 60%; animation-delay: -8s; }
+
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(40px, 30px) scale(1.1); }
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 860px; }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    padding: 7px 18px;
+    border-radius: 100px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 36px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.4rem, 8vw, 7rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .hero-sub {
+    margin: 28px auto 48px;
+    max-width: 560px;
+    font-size: 1.05rem;
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--muted);
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    padding: 16px 36px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--cream);
+    border: 1px solid rgba(242,237,230,0.2);
+    padding: 16px 36px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+    text-decoration: none;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold-light); }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-top: 80px;
+    padding-top: 48px;
+    border-top: 1px solid var(--border);
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 300;
+    color: var(--gold-light);
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-top: 4px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 0;
+    overflow: hidden;
+    background: rgba(201,168,76,0.03);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    animation: marquee 22s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-track span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 48px;
+  }
+  .marquee-track span b {
+    color: var(--gold);
+    font-weight: 400;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 100px 60px; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 4vw, 3.8rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--cream);
+  }
+  h2 em { font-style: italic; color: var(--gold-light); }
+
+  /* ── PROBLEM / SOLUTION ── */
+  .split-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .split-text p {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-top: 24px;
+  }
+  .split-text p + p { margin-top: 16px; }
+
+  .problem-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .prob-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px 28px;
+    background: var(--card-bg);
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .prob-card:hover { border-color: var(--gold); transform: translateX(6px); }
+
+  .prob-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .prob-card h4 {
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+  .prob-card p {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  /* ── FEATURES ── */
+  .features-section {
+    background: var(--card-bg);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .features-header {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 72px;
+  }
+  .features-header p {
+    margin-top: 20px;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1200px;
+    margin: 0 auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .feature-card {
+    padding: 44px 36px;
+    background: var(--ink);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-card:hover { background: #101218; }
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .feature-card:hover::before { transform: scaleX(1); }
+
+  .feature-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    margin-bottom: 28px;
+    display: block;
+  }
+
+  .feature-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+
+  .feature-card p {
+    font-size: 0.85rem;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how-section { max-width: 1200px; margin: 0 auto; }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 64px;
+    position: relative;
+  }
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 12%;
+    right: 12%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), var(--gold), var(--border), transparent);
+  }
+
+  .step {
+    padding: 0 24px;
+    text-align: center;
+  }
+
+  .step-circle {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--gold-light);
+    position: relative;
+    z-index: 1;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .step:hover .step-circle {
+    background: rgba(201,168,76,0.1);
+    box-shadow: 0 0 30px rgba(201,168,76,0.2);
+  }
+
+  .step h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--cream);
+    margin-bottom: 12px;
+  }
+  .step p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── WAITLIST ── */
+  .waitlist-section {
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .waitlist-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(201,168,76,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .waitlist-inner {
+    max-width: 620px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .waitlist-inner h2 { font-size: clamp(2.6rem, 4.5vw, 4rem); margin-bottom: 20px; }
+
+  .waitlist-inner p {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 44px;
+  }
+
+  .waitlist-form {
+    display: flex;
+    gap: 0;
+    max-width: 500px;
+    margin: 0 auto 16px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .waitlist-form:focus-within { border-color: var(--gold); }
+
+  .waitlist-form input {
+    flex: 1;
+    background: rgba(255,255,255,0.03);
+    border: none;
+    padding: 18px 22px;
+    color: var(--cream);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.88rem;
+    outline: none;
+  }
+  .waitlist-form input::placeholder { color: rgba(107,102,89,0.7); }
+
+  .waitlist-form button {
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    padding: 18px 28px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .waitlist-form button:hover { background: var(--gold-light); }
+  .waitlist-form button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .waitlist-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  /* Success message */
+  .success-msg {
+    display: none;
+    border: 1px solid rgba(201,168,76,0.4);
+    background: rgba(201,168,76,0.06);
+    padding: 20px 32px;
+    border-radius: 4px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  .success-msg.show { display: block; animation: fadeUp 0.4s ease; }
+  .success-msg p { color: var(--gold-light); font-size: 0.88rem; line-height: 1.6; }
+  .success-msg strong { font-weight: 700; }
+
+  .waitlist-count {
+    margin-top: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .avatar-stack {
+    display: flex;
+  }
+  .avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    margin-right: -8px;
+    font-size: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .av1 { background: #c9a84c; }
+  .av2 { background: #4c7ec9; }
+  .av3 { background: #4cc97e; }
+  .av4 { background: #c94c4c; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 48px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer .logo { font-size: 1.3rem; }
+
+  .footer-links {
+    display: flex;
+    gap: 32px;
+  }
+  .footer-links a {
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold-light); }
+
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(107,102,89,0.5);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 20px 28px; }
+    nav ul { display: none; }
+    section { padding: 72px 28px; }
+    .hero { padding: 120px 28px 60px; }
+    .split-section { grid-template-columns: 1fr; gap: 48px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; gap: 36px; }
+    .steps::before { display: none; }
+    .hero-stats { gap: 32px; flex-wrap: wrap; }
+    footer { flex-direction: column; gap: 24px; text-align: center; }
+    .footer-links { flex-wrap: wrap; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Aegis<span>AI</span></div>
+  <ul>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#features">Platform</a></li>
+    <li><a href="#waitlist">Pricing</a></li>
+    <li><a href="#waitlist" class="nav-cta">Join Waitlist</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Now accepting early access applications
+    </div>
+
+    <h1>
+      Where <em>AI Marketing</em><br>meets Intelligent<br>Coverage
+    </h1>
+
+    <p class="hero-sub">
+      Aegis AI is the first platform that unifies AI-driven marketing automation with white-label insurance products — built for agencies who want to grow fast and protect what they build.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#waitlist" class="btn-primary">Join the Waitlist</a>
+      <a href="#how" class="btn-secondary">See How It Works</a>
+    </div>
+
+    <div class="hero-stats">
+      <div>
+        <span class="stat-num">3×</span>
+        <span class="stat-label">Avg. Lead Conversion</span>
+      </div>
+      <div>
+        <span class="stat-num">40%</span>
+        <span class="stat-label">Reduction in CAC</span>
+      </div>
+      <div>
+        <span class="stat-num">$0</span>
+        <span class="stat-label">Setup Cost</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span><b>AI Campaigns</b> · Automated Underwriting · Smart Lead Scoring · Policy Management · Predictive Analytics · White-Label Insurance · Client Retention AI · Risk Assessment · </span>
+    <span><b>AI Campaigns</b> · Automated Underwriting · Smart Lead Scoring · Policy Management · Predictive Analytics · White-Label Insurance · Client Retention AI · Risk Assessment · </span>
+    <span><b>AI Campaigns</b> · Automated Underwriting · Smart Lead Scoring · Policy Management · Predictive Analytics · White-Label Insurance · Client Retention AI · Risk Assessment · </span>
+  </div>
+</div>
+
+<!-- PROBLEM / SOLUTION -->
+<section>
+  <div class="split-section">
+    <div class="split-text">
+      <div class="section-label">// The Problem</div>
+      <h2>Agencies are leaving <em>revenue</em> on the table</h2>
+      <p>Marketing agencies win clients. Insurance agencies protect them. But never the twain shall meet — until now.</p>
+      <p>Most agencies use 6+ tools to manage outreach, nurture leads, and handle client coverage. Aegis AI collapses that stack into one intelligent platform that actually talks to itself.</p>
+    </div>
+
+    <div class="problem-cards">
+      <div class="prob-card">
+        <span class="prob-icon">⚡</span>
+        <div>
+          <h4>Fragmented Toolstack</h4>
+          <p>Marketers juggle CRMs, ad platforms, analytics, and insurtech portals that never share data.</p>
+        </div>
+      </div>
+      <div class="prob-card">
+        <span class="prob-icon">📉</span>
+        <div>
+          <h4>Missed Upsell Moments</h4>
+          <p>The moment a client closes a deal is the perfect time to offer coverage — most agencies miss it entirely.</p>
+        </div>
+      </div>
+      <div class="prob-card">
+        <span class="prob-icon">🔄</span>
+        <div>
+          <h4>Manual Underwriting Friction</h4>
+          <p>Traditional insurance workflows stall client onboarding and kill momentum from successful campaigns.</p>
+        </div>
+      </div>
+      <div class="prob-card">
+        <span class="prob-icon">💸</span>
+        <div>
+          <h4>Rising Cost of Acquisition</h4>
+          <p>CPL has grown 85% in five years. Agencies need AI-powered efficiency to stay profitable.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="features-header">
+    <div class="section-label">// The Platform</div>
+    <h2>One platform.<br><em>Two revenue streams.</em></h2>
+    <p>Aegis AI gives you the marketing firepower of a growth agency and the product depth of an insurtech — fully integrated, fully white-labeled.</p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-num">01 —</span>
+      <h3>AI Campaign Engine</h3>
+      <p>Generate, launch, and optimize multi-channel campaigns across search, social, and email using AI trained on 50M+ insurance and financial leads.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">02 —</span>
+      <h3>Predictive Lead Scoring</h3>
+      <p>Rank every prospect by conversion probability and coverage readiness. Stop wasting budget on cold leads that never convert.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">03 —</span>
+      <h3>White-Label Insurance</h3>
+      <p>Offer your clients business, liability, and E&O coverage under your brand. Earn residual commissions on every active policy.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">04 —</span>
+      <h3>Instant Underwriting</h3>
+      <p>AI-powered risk models issue quotes in under 60 seconds. No paperwork, no underwriter back-and-forth, no lost deals.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">05 —</span>
+      <h3>Client Intelligence Hub</h3>
+      <p>A unified dashboard that surfaces churn risk, upsell opportunities, and renewal windows across marketing and insurance activity.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">06 —</span>
+      <h3>Automated Compliance</h3>
+      <p>Built-in regulatory guardrails for insurance ads and financial disclosures. Stay compliant across every state without a compliance team.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="how-section">
+    <div style="text-align:center; max-width:560px; margin:0 auto;">
+      <div class="section-label">// How It Works</div>
+      <h2>From zero to <em>revenue</em> in four steps</h2>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-circle">I</div>
+        <h4>Connect Your Agency</h4>
+        <p>Sync your existing CRM, ad accounts, and client roster. Aegis AI maps your entire book of business in minutes.</p>
+      </div>
+      <div class="step">
+        <div class="step-circle">II</div>
+        <h4>Launch AI Campaigns</h4>
+        <p>Let the AI build and optimize campaigns tailored to your niche — insurance verticals, financial services, local SMBs.</p>
+      </div>
+      <div class="step">
+        <div class="step-circle">III</div>
+        <h4>Offer Coverage</h4>
+        <p>At the peak of client intent, Aegis AI surfaces insurance recommendations. One click to issue a white-label policy.</p>
+      </div>
+      <div class="step">
+        <div class="step-circle">IV</div>
+        <h4>Collect Residuals</h4>
+        <p>Earn recurring commissions on every active policy. Your marketing revenue becomes a predictable annuity.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST -->
+<section class="waitlist-section" id="waitlist">
+  <div class="waitlist-inner">
+    <div class="section-label">// Early Access</div>
+    <h2>Get in before<br><em>the shield goes up.</em></h2>
+    <p>We're onboarding a select group of agencies in our founding cohort. Early members lock in lifetime pricing and get dedicated setup support.</p>
+
+    <div class="waitlist-form" id="form-wrap">
+      <input type="email" id="email-input" placeholder="your@agency.com" autocomplete="email" />
+      <button id="submit-btn" onclick="handleSubmit()">Reserve My Spot</button>
+    </div>
+
+    <div class="success-msg" id="success-msg">
+      <p><strong>You're on the list.</strong> We'll be in touch with early access details soon. Tell a fellow agency owner — the founding cohort is limited to 500 members.</p>
+    </div>
+
+    <p class="waitlist-note">No credit card required · Cancel anytime · SOC 2 compliant</p>
+
+    <div class="waitlist-count">
+      <div class="avatar-stack">
+        <div class="avatar av1">JK</div>
+        <div class="avatar av2">RM</div>
+        <div class="avatar av3">SL</div>
+        <div class="avatar av4">PT</div>
+      </div>
+      <span id="count-text">214 agencies already joined</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">Aegis<span>AI</span></div>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Compliance</a>
+    <a href="#">Contact</a>
+  </div>
+  <p class="footer-copy">© 2026 Aegis AI Inc. All rights reserved.</p>
+</footer>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+  // Public project URL + publishable (anon-equivalent) key — safe to expose client-side.
+  // RLS on the `waitlist` table only allows INSERT from this key, never SELECT.
+  const SUPABASE_URL = 'https://gbtuhlsdfxvrccxvuswo.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_56QRdm990G5BFRg121sF2A_Nxuu10XO';
+  const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  // Baseline shown for social proof, plus real signups pulled from Supabase.
+  const BASE_COUNT = 214;
+
+  async function refreshCount() {
+    const { data, error } = await supabase.rpc('get_waitlist_count');
+    const real = error ? 0 : Number(data ?? 0);
+    document.getElementById('count-text').textContent =
+      `${(BASE_COUNT + real).toLocaleString()} agencies already joined`;
+  }
+  refreshCount();
+
+  window.handleSubmit = async function handleSubmit() {
+    const input = document.getElementById('email-input');
+    const btn = document.getElementById('submit-btn');
+    const formWrap = document.getElementById('form-wrap');
+    const successMsg = document.getElementById('success-msg');
+    const email = input.value.trim();
+
+    if (!email || !email.includes('@')) {
+      input.style.borderRight = '2px solid #c94c4c';
+      input.focus();
+      setTimeout(() => input.style.borderRight = '', 1200);
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    const { error } = await supabase
+      .from('waitlist')
+      .insert({ email, source: 'aegis_landing' });
+
+    if (error) {
+      btn.disabled = false;
+      btn.textContent = 'Reserve My Spot';
+
+      // Postgres unique_violation — they're already on the list, treat as success.
+      if (error.code === '23505') {
+        formWrap.style.display = 'none';
+        successMsg.querySelector('p').innerHTML =
+          "<strong>You're already on the list.</strong> We'll be in touch with early access details soon.";
+        successMsg.classList.add('show');
+        return;
+      }
+
+      input.style.borderRight = '2px solid #c94c4c';
+      input.title = 'Something went wrong — please try again.';
+      setTimeout(() => input.style.borderRight = '', 1200);
+      return;
+    }
+
+    formWrap.style.display = 'none';
+    successMsg.classList.add('show');
+    refreshCount();
+  };
+
+  // Enter key submits
+  document.getElementById('email-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') window.handleSubmit();
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.prob-card, .feature-card, .step').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
